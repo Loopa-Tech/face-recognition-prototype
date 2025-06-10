@@ -196,12 +196,15 @@ cython_debug/
 
 
 # pictures
-*.png
-*.jpg
-# raw
-*.cr2
-*.nef
-*.dng
-*.NEF
-# storage
+# *.png
+# *.jpg
+# # raw
+# *.cr2
+# *.nef
+# *.dng
+# *.NEF
+# # storage
 *.pkl
+indexedPreview/
+photos/raw_converted/
+visualized_faces/
