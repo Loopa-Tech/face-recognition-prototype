@@ -3,8 +3,8 @@ import face_recognition
 import sys
 
 import face_recognition
-def search_face(image_path, index_file="face_index.pkl", tolerance=0.6):
-    with open(index_file, "rb") as f:
+def search_matches(image_path, indexed_faces_file, tolerance=0.6):
+    with open(indexed_faces_file, "rb") as f:
         known_faces = pickle.load(f)
 
     new_image = face_recognition.load_image_file(image_path)
@@ -36,17 +36,16 @@ def search_face(image_path, index_file="face_index.pkl", tolerance=0.6):
     return matched
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python search_face.py <image_path>")
+    if len(sys.argv) < 3:
+        print("Usage: python search_face.py <image_path> <indexed_faces_file>")
         sys.exit(1)
 
     image_path = sys.argv[1]
-
-    # Import the updated search_face function from above or your module
-    matches = search_face(image_path)
-
+    indexed_faces_file = sys.argv[2]
+    matches = search_matches(image_path, indexed_faces_file)
     if matches:
-        import matches_gui
-        matches_gui.show_matches_gui(image_path, matches)
+        print("Matches found:")
+        for name, distance in matches:
+            print(f" - {name} (distance: {distance:.4f})")
     else:
-        print("No matches to display.")
+        print("No matches found.")

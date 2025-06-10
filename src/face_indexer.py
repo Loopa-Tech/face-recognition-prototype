@@ -1,3 +1,4 @@
+from datetime import datetime
 import face_recognition
 import pickle
 import os
@@ -5,7 +6,7 @@ from PIL import Image
 from tqdm import tqdm
 import numpy as np
 
-def index_faces(image_paths, index_file="face_index.pkl", max_faces_per_image=4, progress_callback=None, preview_callback=None):
+def index_faces(image_paths, index_file=None, max_faces_per_image=4, progress_callback=None, preview_callback=None):
     encoded_faces = []
     for idx, image_path in enumerate(tqdm(image_paths, desc="Indexing faces", unit="img")):
         filename = os.path.basename(image_path)
@@ -42,10 +43,17 @@ def index_faces(image_paths, index_file="face_index.pkl", max_faces_per_image=4,
         # Update progress
         if progress_callback:
             progress_callback(idx + 1, len(image_paths))
+    # Generate default index file name if not provided
 
-    # Create directories for the index file if they don't exist
-    os.makedirs(os.path.dirname(os.path.abspath(index_file)), exist_ok=True)
-    
+    if index_file is None: # TODO remove this part and just dont save if it 
+        output_dir = os.path.join(os.getcwd(), "faces_indexed")
+        os.makedirs(output_dir, exist_ok=True)
+
+        timestamp = datetime.now().strftime("%Y-%m-%d--%Hh-%Mm-%Ss")
+        file_name = f"{len(encoded_faces)}-faces-{timestamp}.pkl"
+        index_file = os.path.join(output_dir, file_name)
+
+    # Save the index
     with open(index_file, "wb") as f:
         pickle.dump(encoded_faces, f)
 
