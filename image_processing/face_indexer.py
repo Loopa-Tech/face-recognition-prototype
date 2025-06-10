@@ -31,7 +31,10 @@ def index_faces(image_paths, index_file="face_index.pkl", max_faces_per_image=4,
                 if preview_callback:
                     top, right, bottom, left = face_locations[i]
                     face_image = image[top:bottom, left:right]
-                    preview_callback(face_image, f"{name_prefix}_{i}")
+                    confidence_score = -1 # TODO
+                    face_image_np = np.array(face_image)
+    
+                    preview_callback(face_image_np, image_path, confidence_score, f"{name_prefix}_{i}")
                         
         except Exception as e:
             print(f"Error processing {filename}: {e}")
