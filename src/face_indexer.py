@@ -49,7 +49,7 @@ def index_faces(image_paths, index_file=None, max_faces_per_image=4, progress_ca
     # Generate default index file name if not provided
 
     if index_file is None: # TODO remove this part and just dont save if it 
-        output_dir = os.path.join(os.getcwd(), "faces_indexed")
+        output_dir = os.path.join(os.getcwd(), "../faces_indexed")
         os.makedirs(output_dir, exist_ok=True)
 
         timestamp = datetime.now().strftime("%Y-%m-%d--%Hh-%Mm-%Ss")
