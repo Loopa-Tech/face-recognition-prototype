@@ -1,6 +1,6 @@
 # Face Indexer and Searcher
 
-A powerful tool for organizing and searching your photo collection by faces.
+A tool for organizing and searching your photo collection by faces.
 
 ---
 
