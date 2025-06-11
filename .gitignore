@@ -206,5 +206,6 @@ cython_debug/
 # # storage
 *.pkl
 indexedPreview/
-photos/raw_converted/
 visualized_faces/
+src/tmp_raw_converted
+tmp_raw_converted
