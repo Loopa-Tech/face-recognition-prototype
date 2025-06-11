@@ -5,6 +5,7 @@ import tkinter as tk
 from tkinter import filedialog, ttk
 from tkinter import messagebox
 from PIL import Image, ImageTk
+import time
 
 from search_matches import search_matches
 
@@ -137,14 +138,17 @@ class SearchPage(BasePage):
         threading.Thread(target=self._search_task, daemon=True).start()
 
     def _search_task(self):
+        start_time = time.time()
         try:
             matches = search_matches(self.selected_face, self.selected_pkl)
         except Exception as e:
             matches = []
             self.app.root.after(0, lambda: messagebox.showerror("Search Error", str(e)))
-        self.app.root.after(0, lambda: self._show_matches(matches))
+        end_time = time.time()
+        duration = end_time - start_time
+        self.app.root.after(0, lambda: self._show_matches(matches, duration))
 
-    def _show_matches(self, matches):
+    def _show_matches(self, matches, duration=0):
         self.progress.stop()
         self.progress.pack_forget()
         self.search_btn.config(state="normal")
@@ -155,6 +159,10 @@ class SearchPage(BasePage):
             entry_map = {f["name"]: f for f in face_entries}
         except:
             entry_map = {}
+
+        ttk.Label(self.results_inner,
+                text=f"Search completed in {duration:.2f} seconds",
+                font=('Arial', 10, 'italic')).pack(pady=(0, 10))
 
         if not matches:
             ttk.Label(self.results_inner, text="No matches found.", font=('Arial', 12)).pack(pady=10)
@@ -173,15 +181,13 @@ class SearchPage(BasePage):
                     face_crop.thumbnail((80,80))
                     face_img = ImageTk.PhotoImage(face_crop)
                     self.match_images.append(face_img)
-                    face_lbl = ttk.Label(frame, image=face_img)
-                    face_lbl.pack(side="left", padx=5)
+                    ttk.Label(frame, image=face_img).pack(side="left", padx=5)
 
                     orig_img = img.copy()
                     orig_img.thumbnail((100,100))
                     orig_img_tk = ImageTk.PhotoImage(orig_img)
                     self.match_images.append(orig_img_tk)
-                    orig_lbl = ttk.Label(frame, image=orig_img_tk)
-                    orig_lbl.pack(side="left", padx=5)
+                    ttk.Label(frame, image=orig_img_tk).pack(side="left", padx=5)
                 except Exception:
                     pass
 
