@@ -19,6 +19,10 @@ def index_faces(image_paths, index_file=None, max_faces_per_image=4, progress_ca
 
             if not encodings:
                 print(f"[Warning] No face found in {filename}, (face_locations: {face_locations})")
+                if progress_callback:
+                    progress_callback(idx + 1, len(image_paths))
+                if preview_callback:
+                    preview_callback(None, image_path, "NO FACES FOUND")
                 continue
 
             for i, encoding in enumerate(encodings[:max_faces_per_image]):
@@ -32,10 +36,9 @@ def index_faces(image_paths, index_file=None, max_faces_per_image=4, progress_ca
                 if preview_callback:
                     top, right, bottom, left = face_locations[i]
                     face_image = image[top:bottom, left:right]
-                    confidence_score = -1 # TODO
                     face_image_np = np.array(face_image)
     
-                    preview_callback(face_image_np, image_path, confidence_score, f"{name_prefix}_{i}")
+                    preview_callback(face_image_np, image_path, f"{name_prefix}_{i}")
                         
         except Exception as e:
             print(f"Error processing {filename}: {e}")

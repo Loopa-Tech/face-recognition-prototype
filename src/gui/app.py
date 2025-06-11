@@ -14,7 +14,7 @@ class FaceIndexerApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Face Indexer")
-        self.root.geometry("1200x800")
+        self.root.geometry("960x800")
         
         # Configure styles
         configure_styles()

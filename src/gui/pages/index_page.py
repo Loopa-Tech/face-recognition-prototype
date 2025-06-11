@@ -52,9 +52,9 @@ class IndexPage(BasePage):
     def _init_variables(self):
         """Initialize tkinter variables and state."""
         self.folder_path = tk.StringVar(value="")
-        self.use_raw_var = tk.BooleanVar(value=False)
-        self.show_preview_var = tk.BooleanVar(value=False)
-        self.show_indexed_faces_var = tk.BooleanVar(value=False)
+        self.use_raw_var = tk.BooleanVar(value=True)
+        self.show_preview_var = tk.BooleanVar(value=True)
+        self.show_indexed_faces_var = tk.BooleanVar(value=True)
         
         # Sets to keep track of selected image paths and image references
         self.selected_images = set()
@@ -245,7 +245,7 @@ class IndexPage(BasePage):
         self.toggle_photo_section()
             
         col_count = 6
-        thumbnail_size = 100
+        thumbnail_size = 80
         padding_x = 10
         padding_y = 15
         current_row = 0
@@ -356,10 +356,10 @@ class IndexPage(BasePage):
             self.app.root.after(0, lambda: self.update_progress(current, total))
             self.app.root.after(0, lambda: self.update_timing_display(current, total))
         
-        def preview_callback(face_img_np, original_img_path, confidence, face_name):
+        def preview_callback(face_img_np, original_img_path, face_name):
             """Callback for displaying individual face previews from index_faces."""
             self.total_faces_found += 1
-            self.app.root.after(0, lambda: self.add_indexed_face(face_img_np, original_img_path, confidence, face_name))
+            self.app.root.after(0, lambda: self.add_indexed_face(face_img_np, original_img_path, face_name))
         
         try:
             processed_image_paths = image_paths
@@ -438,13 +438,14 @@ class IndexPage(BasePage):
         self.indexed_face_images.clear()
         self.indexed_canvas.config(scrollregion=self.indexed_canvas.bbox("all"))
     
-    def add_indexed_face(self, face_img_np, original_img_path, confidence, face_name):
+    def add_indexed_face(self, face_img_np, original_img_path, face_name):
         """Adds a new indexed face to the display."""
         try:
             # Convert numpy array to PIL Image for face
-            face_pil = Image.fromarray(face_img_np)
-            face_pil.thumbnail((100, 100))
-            face_tk = ImageTk.PhotoImage(face_pil)
+            if face_img_np:
+                face_pil = Image.fromarray(face_img_np)
+                face_pil.thumbnail((100, 100))
+                face_tk = ImageTk.PhotoImage(face_pil)
             
             # Load and thumbnail the original image
             original_pil = Image.open(original_img_path)
@@ -452,7 +453,10 @@ class IndexPage(BasePage):
             original_tk = ImageTk.PhotoImage(original_pil)
             
             # Store references to prevent garbage collection
-            self.indexed_face_images.extend([face_tk, original_tk])
+            if face_img_np is not None and face_img_np.size > 0:
+                self.indexed_face_images.extend([face_tk, original_tk])
+            else:
+                self.indexed_face_images.append(original_tk)
             
             # Create container for this face entry
             face_entry = ttk.Frame(self.indexed_inner_frame, padding=10, style="IndexedFace.TFrame")
@@ -461,16 +465,12 @@ class IndexPage(BasePage):
             # Left side - Face image
             left_frame = ttk.Frame(face_entry)
             left_frame.pack(side="left", padx=(0, 20))
-            
-            face_label = ttk.Label(left_frame, image=face_tk)
-            face_label.pack()
+            if face_img_np is not None and face_img_np.size > 0:
+                face_label = ttk.Label(left_frame, image=face_tk)
+                face_label.pack()
             
             face_name_label = ttk.Label(left_frame, text=face_name, font=('Arial', 9, 'bold'))
             face_name_label.pack(pady=(5, 0))
-            
-            confidence_label = ttk.Label(left_frame, text=f"Confidence: {confidence:.2f}", 
-                                       font=('Arial', 8), foreground="#666666")
-            confidence_label.pack()
             
             # Right side - Original image
             right_frame = ttk.Frame(face_entry)
