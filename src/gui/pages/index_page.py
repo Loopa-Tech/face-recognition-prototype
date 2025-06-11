@@ -84,6 +84,10 @@ class IndexPage(BasePage):
         ttk.Checkbutton(control_frame, text="Include RAW Files", variable=self.use_raw_var, command=self.scan_folder_for_images).grid(row=1, column=0, sticky="w", pady=5)
         ttk.Checkbutton(control_frame, text="Show Photo Section", variable=self.show_preview_var, command=self.toggle_photo_section).grid(row=1, column=1, sticky="w", pady=5)
         
+        # Selected images counter label
+        self.selected_count_label = ttk.Label(control_frame, text="0 images selected", font=('Arial', 9))
+        self.selected_count_label.grid(row=2, column=0, columnspan=2, sticky="w", pady=(0, 5))
+        
         # Main "Index Faces" button
         self.index_btn = ttk.Button(control_frame, text="Index Faces", command=self.run_index_thread)
         self.index_btn.grid(row=1, column=2, pady=10, sticky="ew")
@@ -239,7 +243,7 @@ class IndexPage(BasePage):
         # Ensure the photo section is visible when new images are displayed
         self.show_preview_var.set(True)
         self.toggle_photo_section()
-        
+            
         col_count = 6
         thumbnail_size = 100
         padding_x = 10
@@ -303,6 +307,10 @@ class IndexPage(BasePage):
             else:
                 frame_widget.config(borderwidth=1, relief="solid")
                 frame_widget.configure(style="Thumbnail.TFrame")
+    
+        # Update the selected count label
+        count = len(self.selected_images)
+        self.selected_count_label.config(text=f"{count} image{'s' if count != 1 else ''} selected")
     
     def get_selected_images(self):
         """Returns a list of currently selected image paths."""
