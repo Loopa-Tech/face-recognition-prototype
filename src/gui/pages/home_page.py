@@ -21,7 +21,7 @@ class HomePage(BasePage):
         
         # Title
         title_label = ttk.Label(content_frame, 
-                               text="Face Indexer", 
+                               text="Face Indexer and Searcher", 
                                style="HomeTitle.TLabel")
         title_label.pack(pady=(0, 10))
         

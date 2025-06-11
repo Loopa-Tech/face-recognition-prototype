@@ -13,7 +13,7 @@ from .styles import configure_styles
 class FaceIndexerApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Face Indexer")
+        self.root.title("Face Indexer and Searcher")
         self.root.geometry("960x800")
         
         # Configure styles

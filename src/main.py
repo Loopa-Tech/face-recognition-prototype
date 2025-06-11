@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Face Indexer Application - Main Entry Point
-"""
-
 import tkinter as tk
 from gui.app import FaceIndexerApp
 

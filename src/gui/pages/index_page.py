@@ -28,7 +28,7 @@ class IndexPage(BasePage):
         self._create_navigation_bar()
         
         # Main container frame for padding and overall layout
-        main_frame = ttk.Frame(self.frame, padding=15)
+        main_frame = ttk.Frame(self.frame, padding=(15, 8))
         main_frame.pack(fill="both", expand=True)
         
         # Initialize state variables
@@ -71,8 +71,8 @@ class IndexPage(BasePage):
     
     def _setup_controls(self, parent):
         """Setup control frame with folder selection and options."""
-        control_frame = ttk.LabelFrame(parent, text="Folder and Options", padding=10)
-        control_frame.grid(row=0, column=0, columnspan=2, sticky="ew", pady=10)
+        control_frame = ttk.LabelFrame(parent, text="Folder and Options", padding=(10,5))
+        control_frame.grid(row=0, column=0, columnspan=2, sticky="ew", pady=(5.8))
         control_frame.grid_columnconfigure(1, weight=1)
         
         # Folder path display and entry
@@ -86,16 +86,16 @@ class IndexPage(BasePage):
         
         # Selected images counter label
         self.selected_count_label = ttk.Label(control_frame, text="0 images selected", font=('Arial', 9))
-        self.selected_count_label.grid(row=2, column=0, columnspan=2, sticky="w", pady=(0, 5))
+        self.selected_count_label.grid(row=2, column=0, columnspan=2, sticky="w", pady=(0, 2))
         
         # Main "Index Faces" button
         self.index_btn = ttk.Button(control_frame, text="Index Faces", command=self.run_index_thread)
-        self.index_btn.grid(row=1, column=2, pady=10, sticky="ew")
+        self.index_btn.grid(row=1, column=2, pady=(2,5), sticky="ew")
     
     def _setup_preview_section(self, parent):
         """Setup image preview section."""
-        self.preview_frame = ttk.LabelFrame(parent, text="Image Previews (Click to Select/Deselect)", padding=10)
-        self.preview_frame.grid(row=1, column=0, columnspan=2, sticky="nsew", pady=10)
+        self.preview_frame = ttk.LabelFrame(parent, text="Image Previews (Click to Select/Deselect)", padding=(10,5))
+        self.preview_frame.grid(row=1, column=0, columnspan=2, sticky="nsew", pady=(5,5))
         self.preview_frame.grid_rowconfigure(0, weight=1)
         self.preview_frame.grid_columnconfigure(0, weight=1)
         
@@ -124,11 +124,11 @@ class IndexPage(BasePage):
     def _setup_progress_section(self, parent):
         """Setup progress bar and timing info."""
         progress_frame = ttk.Frame(parent)
-        progress_frame.grid(row=2, column=0, columnspan=2, sticky="ew", pady=10)
+        progress_frame.grid(row=2, column=0, columnspan=2, sticky="ew", pady=(2, 3))
         progress_frame.grid_columnconfigure(0, weight=1)
         
         self.progress = ttk.Progressbar(progress_frame, orient="horizontal", length=600, mode="determinate")
-        self.progress.grid(row=0, column=0, sticky="ew", padx=(0, 10))
+        self.progress.grid(row=0, column=0, sticky="ew", padx=(0, 10), pady=(0, 0))
         
         # Timing information label
         self.timing_label = ttk.Label(progress_frame, text="Ready", font=('Arial', 9))
@@ -140,21 +140,21 @@ class IndexPage(BasePage):
         self.stats_frame.grid(row=3, column=0, columnspan=2, sticky="ew", pady=10)
         
         self.stats_label = ttk.Label(self.stats_frame, text="No processing completed yet", font=('Arial', 9))
-        self.stats_label.pack(anchor="w")
+        self.stats_label.pack(anchor="w", pady=(0, 0))
     
     def _setup_indexed_faces_section(self, parent):
         """Setup indexed faces display section."""
         # Control for indexed faces section
         indexed_faces_control_frame = ttk.Frame(parent)
-        indexed_faces_control_frame.grid(row=4, column=0, columnspan=2, sticky="ew", pady=5)
+        indexed_faces_control_frame.grid(row=4, column=0, columnspan=2, sticky="ew", pady=(3, 3))
         
         ttk.Checkbutton(indexed_faces_control_frame, text="Show Indexed Faces", 
                        variable=self.show_indexed_faces_var, 
                        command=self.toggle_indexed_faces_section).pack(anchor="w")
         
         # Indexed Faces Display Area
-        self.indexed_faces_frame = ttk.LabelFrame(parent, text="Indexed Faces", padding=10)
-        self.indexed_faces_frame.grid(row=5, column=0, columnspan=2, sticky="nsew", pady=10)
+        self.indexed_faces_frame = ttk.LabelFrame(parent, text="Indexed Faces", padding=(10,3))
+        self.indexed_faces_frame.grid(row=5, column=0, columnspan=2, sticky="nsew", pady=(2,1))
         self.indexed_faces_frame.grid_rowconfigure(0, weight=1)
         self.indexed_faces_frame.grid_columnconfigure(0, weight=1)
         
