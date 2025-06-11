@@ -11,29 +11,9 @@ import time
 from ..base_page import BasePage
 
 # Import your existing modules - adjust paths as needed
-try:
-    from face_indexer import index_faces
-    from raw_converter import convert_all_raw_images
-    from utils.file_utils import collect_image_paths
-except ImportError as e:
-    print(f"Warning: Could not import face indexing modules: {e}")
-    # Provide dummy functions for testing
-    def index_faces(paths, progress_callback=None, preview_callback=None):
-        if progress_callback:
-            for i in range(len(paths)):
-                time.sleep(0.1)  # Simulate processing
-                progress_callback(i + 1, len(paths))
-    
-    def convert_all_raw_images(paths):
-        return paths
-    
-    def collect_image_paths(folder, extensions):
-        import glob
-        all_files = []
-        for ext in extensions:
-            pattern = os.path.join(folder, f"**/*{ext}")
-            all_files.extend(glob.glob(pattern, recursive=True))
-        return all_files
+from face_indexer import index_faces
+from raw_converter import convert_all_raw_images
+from utils.file_utils import collect_image_paths
 
 # Define common RAW and standard image extensions
 RAW_EXTENSIONS = ['.nef', '.arw', '.dng', '.cr2', '.cr3']
