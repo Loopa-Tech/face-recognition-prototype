@@ -7,9 +7,9 @@ import threading
 import tkinter as tk
 from tkinter import filedialog, ttk
 from PIL import Image, ImageTk
+from PIL import ImageOps
 import time
 from ..base_page import BasePage
-
 # Import your existing modules - adjust paths as needed
 from face_indexer import index_faces
 from raw_converter import convert_all_raw_images
@@ -254,6 +254,7 @@ class IndexPage(BasePage):
         for path in img_paths:
             try:
                 image = Image.open(path)
+                image = ImageOps.exif_transpose(image)
                 image.thumbnail((thumbnail_size, thumbnail_size))
                 
                 img_tk = ImageTk.PhotoImage(image)
@@ -442,13 +443,14 @@ class IndexPage(BasePage):
         """Adds a new indexed face to the display."""
         try:
             # Convert numpy array to PIL Image for face
-            if face_img_np:
+            if face_img_np is not None and face_img_np.size > 0:
                 face_pil = Image.fromarray(face_img_np)
                 face_pil.thumbnail((100, 100))
                 face_tk = ImageTk.PhotoImage(face_pil)
             
             # Load and thumbnail the original image
             original_pil = Image.open(original_img_path)
+            original_pil = ImageOps.exif_transpose(original_pil)
             original_pil.thumbnail((150, 150))
             original_tk = ImageTk.PhotoImage(original_pil)
             
