@@ -27,16 +27,19 @@ CREATE INDEX IF NOT EXISTS mail_queue ON mail(status,available);
 CREATE INDEX IF NOT EXISTS metrics_date ON metrics(created);
 """
 
+
 class Database:
     def __init__(self, root=None):
-        self.root = Path(root or os.getenv('ALPICTURIA_DATA', './var/alpicturia')).resolve()
-        self.root.mkdir(parents=True, exist_ok=True,mode=0o700)
+        self.root = Path(
+            root or os.getenv("ALPICTURIA_DATA", "./var/alpicturia")
+        ).resolve()
+        self.root.mkdir(parents=True, exist_ok=True, mode=0o700)
         self.root.chmod(0o700)
-        for directory in ('photos','previews','selfies','incoming'):
-            (self.root / directory).mkdir(exist_ok=True,mode=0o700)
-        self.path = self.root / 'app.sqlite3'
+        for directory in ("photos", "previews", "selfies", "incoming"):
+            (self.root / directory).mkdir(exist_ok=True, mode=0o700)
+        self.path = self.root / "app.sqlite3"
         with self.connect() as conn:
-            conn.execute('PRAGMA journal_mode=WAL')
+            conn.execute("PRAGMA journal_mode=WAL")
             conn.executescript(SCHEMA)
         self.path.chmod(0o600)
 
@@ -44,7 +47,7 @@ class Database:
     def connect(self):
         conn = sqlite3.connect(self.path, timeout=30)
         conn.row_factory = sqlite3.Row
-        conn.execute('PRAGMA foreign_keys=ON')
+        conn.execute("PRAGMA foreign_keys=ON")
         try:
             yield conn
             conn.commit()
@@ -59,9 +62,9 @@ class Database:
             return [dict(row) for row in conn.execute(sql, args).fetchall()]
 
     def one(self, sql, args=()):
-        rows = self.all(sql,args)
+        rows = self.all(sql, args)
         return rows[0] if rows else None
 
     def run(self, sql, args=()):
         with self.connect() as conn:
-            return conn.execute(sql,args).rowcount
+            return conn.execute(sql, args).rowcount
