@@ -209,3 +209,11 @@ indexedPreview/
 visualized_faces/
 src/tmp_raw_converted
 tmp_raw_converted
+# Alpicturia web runtime (contains private photos, face vectors and credentials)
+var/
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+.env.*
+!.env.example
+web/.env
