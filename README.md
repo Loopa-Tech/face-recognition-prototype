@@ -81,3 +81,11 @@ python src/main.py
 
 **Results:**
 - All photos containing people matching the selected face will be shown
+
+---
+
+## Alpicturia — application web
+
+Le prototype de bureau ci-dessus est conservé. La nouvelle application web se trouve dans `web/` : espace festivalier mobile/PWA, portail photographe, administration, comptes/email, API et MCP, worker et déploiement Docker.
+
+Consultez **[le guide de reprise et de démarrage](docs/ALPICTURIA-REPRISE.md)** pour les commandes, les fonctionnalités disponibles, les tests et les étapes encore nécessaires avant ouverture publique.

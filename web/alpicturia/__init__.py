@@ -1,0 +1,1 @@
+"""Alpicturia application foundation."""
